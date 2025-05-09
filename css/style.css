@@ -364,7 +364,7 @@ body {
 
 .content {
     padding: 3rem 4rem;
-    min-width: 600px;
+    min-width: 400px;
     max-width: 800px;
     margin: 2rem auto;
     background: var(--surface-color);
