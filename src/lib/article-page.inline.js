@@ -177,6 +177,56 @@ function bindArticleVideos() {
   reduceMotion.addEventListener('change', applyReducedMotionState);
 }
 
+function bindTocEnhancements() {
+  const toc = document.querySelector('.dr-toc--desktop starlight-toc');
+  if (!toc) return;
+
+  const links = [...toc.querySelectorAll('a')];
+  if (links.length <= 1) return;
+
+  let frameId = 0;
+  let atBottom = false;
+
+  const forceLastActive = () => {
+    const last = links[links.length - 1];
+    const current = toc.querySelector('a[aria-current="true"]');
+    if (current === last) return;
+    for (const link of links) {
+      link.removeAttribute('aria-current');
+    }
+    last.setAttribute('aria-current', 'true');
+  };
+
+  const update = () => {
+    frameId = 0;
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    atBottom = scrollable > 0 && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+    if (atBottom) {
+      forceLastActive();
+    }
+  };
+
+  const requestUpdate = () => {
+    if (frameId !== 0) return;
+    frameId = window.requestAnimationFrame(update);
+  };
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate, { passive: true });
+
+  // 防止 Starlight IntersectionObserver 在底部时覆盖最后一个标题的高亮
+  const observer = new MutationObserver(() => {
+    if (!atBottom) return;
+    forceLastActive();
+  });
+
+  for (const link of links) {
+    observer.observe(link, { attributes: true, attributeFilter: ['aria-current'] });
+  }
+
+  requestUpdate();
+}
+
 function bindImageComparisons() {
   const containers = document.querySelectorAll('.dr-img-comp:not([data-dr-init])');
 
@@ -427,6 +477,7 @@ function bindImageGalleries() {
 }
 
 bindReadingProgress();
+bindTocEnhancements();
 bindImageComparisons();
 bindImageGalleries();
 bindZoomableImages();
