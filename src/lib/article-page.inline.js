@@ -191,10 +191,16 @@ function bindTocEnhancements() {
     const last = links[links.length - 1];
     const current = toc.querySelector('a[aria-current="true"]');
     if (current === last) return;
-    for (const link of links) {
-      link.removeAttribute('aria-current');
+    // 通过 StarlightTOC 的 current setter 设置高亮，确保 _current 内部状态同步
+    // 避免离开底部后 setter 无法清除最后一个标题的 aria-current
+    toc.current = last;
+    // 降级：setter 不存在时直接操作 DOM
+    if (!last.hasAttribute('aria-current')) {
+      for (const link of links) {
+        link.removeAttribute('aria-current');
+      }
+      last.setAttribute('aria-current', 'true');
     }
-    last.setAttribute('aria-current', 'true');
   };
 
   const update = () => {
