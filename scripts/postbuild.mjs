@@ -74,10 +74,20 @@ function rewriteSearchBundle(filePath) {
     'bundlePath:(()=>{const r=window.location.pathname.replace(/\\\\/index\\\\.html$/,"/").split("/").filter(Boolean).length;',
     'const c=r===0?"./":"../".repeat(r);return c+"pagefind/"})()'
   ].join('');
-  const updated = source.replace(
-    'baseUrl:"/",bundlePath:"/".replace(/\\/$/,"")+"/pagefind/"',
-    replacement
-  );
+
+  // Starlight 新版使用反引号模板字符串, 旧版使用双引号
+  const patterns = [
+    'baseUrl:`/`,bundlePath:`/`.replace(/\\/$/,``)+`/pagefind/`',
+    'baseUrl:"/",bundlePath:"/".replace(/\\/$/,"")+"/pagefind/"'
+  ];
+
+  let updated = source;
+  for (const pattern of patterns) {
+    if (updated.includes(pattern)) {
+      updated = updated.replace(pattern, replacement);
+      break;
+    }
+  }
 
   if (updated === source) {
     return false;
