@@ -153,13 +153,18 @@ const categoryIcons: Record<string, string> = {
     pointer-events: none;
     background:
       radial-gradient(
-        ellipse 50% 80% at 80% 50%,
-        color-mix(in srgb, var(--sl-color-accent) 14%, transparent),
+        ellipse 60% 100% at 85% 50%,
+        color-mix(in srgb, var(--sl-color-accent) 22%, transparent),
         transparent 70%
       ),
       radial-gradient(
-        ellipse 40% 60% at 15% 30%,
-        color-mix(in srgb, var(--sl-color-accent-high) 8%, transparent),
+        ellipse 50% 80% at 10% 20%,
+        color-mix(in srgb, #6b5bd2 12%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse 40% 60% at 50% 100%,
+        color-mix(in srgb, var(--sl-color-accent-high) 10%, transparent),
         transparent 65%
       );
     opacity: 1;
@@ -288,8 +293,8 @@ const categoryIcons: Record<string, string> = {
     box-shadow: var(--site-shadow-hover);
     background: linear-gradient(
       135deg,
-      color-mix(in srgb, var(--sl-color-accent) 30%, var(--site-line)),
-      var(--site-line)
+      color-mix(in srgb, var(--sl-color-accent) 35%, var(--site-line)),
+      color-mix(in srgb, #6b5bd2 15%, var(--site-line))
     );
   }
 
@@ -297,8 +302,13 @@ const categoryIcons: Record<string, string> = {
     background:
       radial-gradient(
         ellipse 80% 50% at 50% 0%,
-        color-mix(in srgb, var(--sl-color-accent) 16%, transparent),
+        color-mix(in srgb, var(--sl-color-accent) 20%, transparent),
         transparent 70%
+      ),
+      radial-gradient(
+        ellipse 60% 40% at 80% 100%,
+        color-mix(in srgb, #6b5bd2 8%, transparent),
+        transparent 65%
       ),
       var(--site-bg-panel-strong);
   }

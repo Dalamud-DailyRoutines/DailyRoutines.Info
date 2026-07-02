@@ -53,6 +53,7 @@ export default defineConfig({
       sidebar: buildSidebarConfig(),
       components: {
         SiteTitle: './src/components/starlight/SiteTitle.astro',
+        Search: './src/components/starlight/Search.astro',
         LanguageSelect: './src/components/starlight/LanguageSelect.astro',
         PageTitle: './src/components/starlight/PageTitle.astro',
         MarkdownContent: './src/components/starlight/MarkdownContent.astro',
