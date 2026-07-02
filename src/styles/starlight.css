@@ -1,50 +1,263 @@
+/* ============================================================
+   Windows 11 Mica 主题 — 全局变量
+   ============================================================ */
+
 :root {
-  --sl-font: "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  /* 字体 */
+  --sl-font: "Segoe UI Variable", "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+    "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
   --sl-font-system: var(--sl-font);
-  --sl-color-accent-low: #dbeafe;
-  --sl-color-accent: #2563eb;
-  --sl-color-accent-high: #1d4ed8;
-  --sl-color-white: #0f172a;
-  --sl-color-gray-1: #1e293b;
-  --sl-color-gray-2: #334155;
-  --sl-color-gray-3: #64748b;
-  --sl-color-gray-4: #94a3b8;
-  --sl-color-gray-5: #dbe4f0;
-  --sl-color-gray-6: #eff6ff;
-  --sl-color-black: #f8fbff;
-  --site-bg-base: #f8fbff;
-  --site-bg-panel: rgba(255, 255, 255, 0.9);
-  --site-bg-panel-strong: rgba(255, 255, 255, 0.96);
-  --site-line: rgba(148, 163, 184, 0.18);
-  --site-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
-  --site-shadow-strong: 0 16px 36px rgba(15, 23, 42, 0.08);
-  --site-link: #2563eb;
-  --site-link-hover: #1d4ed8;
-  --site-title: #1f3b8f;
+  --sl-font-mono: "Cascadia Code", "JetBrains Mono", "Fira Code", "SF Mono",
+    "Consolas", ui-monospace, monospace;
+
+  /* 强调色 — Windows 11 Accent Blue */
+  --sl-color-accent-low: #c7e0f4;
+  --sl-color-accent: #0067c0;
+  --sl-color-accent-high: #00538a;
+  --sl-color-accent-visiting: #00538a;
+
+  /* 文本与背景 — 反转语义 (Starlight 约定) */
+  --sl-color-white: #1a1a1a;
+  --sl-color-gray-1: #282828;
+  --sl-color-gray-2: #4a4a4a;
+  --sl-color-gray-3: #6a6a6a;
+  --sl-color-gray-4: #8a8a8a;
+  --sl-color-gray-5: #e0e0e0;
+  --sl-color-gray-6: #f0f0f0;
+  --sl-color-black: #fbfbfb;
+
+  /* 站点设计令牌 */
+  --site-bg-base: #f5f5f5;
+  --site-bg-panel: rgba(252, 252, 252, 0.72);
+  --site-bg-panel-strong: rgba(255, 255, 255, 0.88);
+  --site-bg-panel-solid: rgba(255, 255, 255, 0.96);
+
+  --site-line: rgba(0, 0, 0, 0.06);
+  --site-line-strong: rgba(0, 0, 0, 0.1);
+
+  --site-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.05);
+  --site-shadow-strong: 0 2px 8px rgba(0, 0, 0, 0.06), 0 12px 36px rgba(0, 0, 0, 0.08);
+  --site-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.06), 0 16px 48px rgba(0, 0, 0, 0.1);
+
+  --site-link: #0067c0;
+  --site-link-hover: #00538a;
+  --site-title: #005a9e;
+
+  /* 圆角 */
+  --site-radius-sm: 6px;
+  --site-radius: 8px;
+  --site-radius-lg: 12px;
+  --site-radius-xl: 16px;
+
+  /* 缓动函数 — Windows 11 自然缓动 */
+  --site-ease: cubic-bezier(0.33, 0, 0, 1);
+  --site-ease-reveal: cubic-bezier(0.13, 0.61, 0.4, 1);
+
+  /* 模糊强度 */
+  --site-blur: 30px;
+  --site-blur-strong: 60px;
+
+  --sl-header-height: 3.75rem;
 }
 
+/* ============================================================
+   暗色模式
+   ============================================================ */
+
 :root[data-theme='dark'] {
-  --sl-color-accent-low: #0f1f3d;
-  --sl-color-accent: #60a5fa;
-  --sl-color-accent-high: #bfdbfe;
-  --sl-color-white: #e5eefb;
-  --sl-color-gray-1: #d8e3f4;
-  --sl-color-gray-2: #b4c3d9;
-  --sl-color-gray-3: #7f93b2;
-  --sl-color-gray-4: #4c5f7d;
-  --sl-color-gray-5: #1f2b3d;
-  --sl-color-gray-6: #121a27;
-  --sl-color-black: #0a101a;
-  --site-bg-base: #0a101a;
-  --site-bg-panel: rgba(11, 18, 32, 0.86);
-  --site-bg-panel-strong: rgba(11, 18, 32, 0.94);
-  --site-line: rgba(127, 147, 178, 0.18);
-  --site-shadow: 0 14px 36px rgba(2, 8, 23, 0.28);
-  --site-shadow-strong: 0 20px 48px rgba(2, 8, 23, 0.34);
-  --site-link: #7db8ff;
-  --site-link-hover: #bcdcff;
-  --site-title: #d7e6ff;
+  --sl-color-accent-low: #0a2e4a;
+  --sl-color-accent: #4cc2ff;
+  --sl-color-accent-high: #99dcff;
+  --sl-color-accent-visiting: #99dcff;
+
+  --sl-color-white: #f0f0f0;
+  --sl-color-gray-1: #e0e0e0;
+  --sl-color-gray-2: #b0b0b0;
+  --sl-color-gray-3: #8a8a8a;
+  --sl-color-gray-4: #6a6a6a;
+  --sl-color-gray-5: #2a2a2a;
+  --sl-color-gray-6: #1e1e1e;
+  --sl-color-black: #1c1c1c;
+
+  --site-bg-base: #1c1c1c;
+  --site-bg-panel: rgba(36, 36, 36, 0.72);
+  --site-bg-panel-strong: rgba(40, 40, 40, 0.88);
+  --site-bg-panel-solid: rgba(44, 44, 44, 0.96);
+
+  --site-line: rgba(255, 255, 255, 0.08);
+  --site-line-strong: rgba(255, 255, 255, 0.12);
+
+  --site-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.28);
+  --site-shadow-strong: 0 2px 8px rgba(0, 0, 0, 0.24), 0 12px 36px rgba(0, 0, 0, 0.36);
+  --site-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.28), 0 16px 48px rgba(0, 0, 0, 0.4);
+
+  --site-link: #4cc2ff;
+  --site-link-hover: #99dcff;
+  --site-title: #99dcff;
 }
+
+/* ============================================================
+   Mica 环境背景 — 模拟桌面壁纸透出
+   ============================================================ */
+
+body {
+  background: var(--site-bg-base);
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 5%, color-mix(in srgb, var(--sl-color-accent) 8%, transparent), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 15%, color-mix(in srgb, var(--sl-color-accent-high) 6%, transparent), transparent 55%),
+    radial-gradient(ellipse 70% 60% at 75% 85%, color-mix(in srgb, var(--sl-color-accent) 5%, transparent), transparent 60%),
+    radial-gradient(ellipse 40% 50% at 10% 90%, color-mix(in srgb, var(--sl-color-accent-low) 10%, transparent), transparent 55%);
+  opacity: 1;
+  transition: opacity 0.6s var(--site-ease);
+}
+
+:root[data-theme='dark'] body::before {
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 5%, color-mix(in srgb, var(--sl-color-accent) 12%, transparent), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 15%, color-mix(in srgb, #6b5bd2 8%, transparent), transparent 55%),
+    radial-gradient(ellipse 70% 60% at 75% 85%, color-mix(in srgb, var(--sl-color-accent-low) 10%, transparent), transparent 60%),
+    radial-gradient(ellipse 40% 50% at 10% 90%, color-mix(in srgb, #3a2e6e 6%, transparent), transparent 55%);
+}
+
+/* ============================================================
+   自定义滚动条 — Windows 11 风格
+   ============================================================ */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--sl-color-gray-3) 35%, transparent) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--sl-color-gray-3) 35%, transparent);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--sl-color-gray-3) 55%, transparent);
+  background-clip: content-box;
+}
+
+/* ============================================================
+   选区与焦点
+   ============================================================ */
+
+::selection {
+  background: color-mix(in srgb, var(--sl-color-accent) 25%, transparent);
+  color: var(--sl-color-white);
+}
+
+:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+  border-radius: var(--site-radius-sm);
+}
+
+/* ============================================================
+   头部 — Mica Acrylic 材质
+   ============================================================ */
+
+header.header {
+  backdrop-filter: blur(var(--site-blur)) saturate(1.2);
+  -webkit-backdrop-filter: blur(var(--site-blur)) saturate(1.2);
+  background: color-mix(in srgb, var(--site-bg-panel) 78%, transparent);
+  box-shadow: none;
+  border-bottom: 1px solid var(--site-line);
+  transition:
+    background-color 0.3s var(--site-ease),
+    border-color 0.3s var(--site-ease);
+}
+
+:root[data-theme='dark'] header.header {
+  background: color-mix(in srgb, var(--site-bg-panel) 72%, transparent);
+  border-bottom: 1px solid var(--site-line);
+}
+
+header.header > .header {
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  padding: 0;
+}
+
+/* ============================================================
+   站点标题
+   ============================================================ */
+
+.site-title {
+  gap: 0.65rem;
+  font-size: clamp(1.05rem, 1rem + 0.3vw, 1.45rem);
+  font-weight: 600;
+  color: var(--site-title);
+  letter-spacing: -0.01em;
+  transition: color 0.2s var(--site-ease);
+}
+
+.site-title:hover {
+  color: var(--sl-color-accent);
+}
+
+.site-title img {
+  height: 2rem;
+  border-radius: var(--site-radius-sm);
+  transition: transform 0.2s var(--site-ease);
+}
+
+.site-title:hover img {
+  transform: scale(1.05);
+}
+
+.title-wrapper {
+  padding-inline-start: 0.1rem;
+}
+
+/* ============================================================
+   导航栏交互元素
+   ============================================================ */
+
+.header .social-icons a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--site-radius);
+  color: var(--sl-color-gray-3);
+  transition:
+    color 0.2s var(--site-ease),
+    background-color 0.2s var(--site-ease),
+    transform 0.2s var(--site-ease);
+}
+
+.header .social-icons a:hover {
+  color: var(--sl-color-accent);
+  background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+  transform: scale(1.05);
+}
+
+/* ============================================================
+   面板基础 — Mica 材质
+   ============================================================ */
 
 .content-panel {
   padding: 1.25rem var(--sl-content-pad-x);
@@ -56,58 +269,142 @@
 
 .sidebar-pane {
   backdrop-filter: none;
-  background: color-mix(in srgb, var(--site-bg-base) 98%, transparent);
-}
-
-:root,
-:root[data-theme='dark'] {
-  --sl-header-height: 4.5rem;
-}
-
-body {
-  background: var(--site-bg-base);
-}
-
-header.header {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background: color-mix(in srgb, var(--site-bg-panel) 85%, transparent);
-  box-shadow:
-    0 4px 24px -2px rgba(15, 23, 42, 0.05),
-    0 1px 0 rgba(15, 23, 42, 0.06);
-  border-bottom: 1px solid color-mix(in srgb, var(--site-line) 60%, transparent);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-:root[data-theme='dark'] header.header {
-  background: color-mix(in srgb, var(--site-bg-panel) 75%, transparent);
-  box-shadow:
-    0 4px 24px -2px rgba(2, 8, 23, 0.2),
-    0 1px 0 rgba(2, 8, 23, 0.3);
-  border-bottom: 1px solid color-mix(in srgb, var(--site-line) 50%, transparent);
-}
-
-header.header > .header {
   background: transparent;
-  box-shadow: none;
-  border: 0;
+}
+
+/* ============================================================
+   主内容区 — Mica 卡片
+   ============================================================ */
+
+:root[data-has-sidebar] main > .content-panel:first-of-type {
+  padding-top: 0.85rem;
+  padding-bottom: 0.35rem;
+}
+
+:root[data-has-sidebar] main > .content-panel:first-of-type .sl-container {
   padding: 0;
+  max-width: var(--sl-content-width);
+  border-radius: var(--site-radius-lg);
+  background: var(--site-bg-panel);
+  backdrop-filter: blur(var(--site-blur)) saturate(1.15);
+  -webkit-backdrop-filter: blur(var(--site-blur)) saturate(1.15);
+  border: 1px solid var(--site-line);
+  box-shadow:
+    var(--site-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 4%, transparent);
+  overflow: clip;
 }
 
-.site-title {
-  gap: 0.7rem;
-  font-size: clamp(1.08rem, 1rem + 0.35vw, 1.55rem);
+:root[data-has-sidebar] main > .content-panel:first-of-type h1 {
+  margin: 0;
+  padding: 1.35rem 1.65rem;
+  font-size: clamp(1.9rem, 2.8vw, 3rem);
   font-weight: 700;
-  color: var(--site-title);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  border-bottom: 1px solid var(--site-line);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--sl-color-accent-low) 16%, transparent),
+    transparent 80%
+  );
 }
 
-.site-title img {
-  height: 2.25rem;
+:root[data-has-sidebar] main > .content-panel:nth-of-type(2) {
+  padding-top: 0.35rem;
 }
 
-.title-wrapper {
-  padding-inline-start: 0.15rem;
+:root[data-has-sidebar] main > .content-panel:nth-of-type(2) .sl-container {
+  padding: 1.6rem 1.65rem 1.9rem;
+  border-radius: var(--site-radius-lg);
+  background: var(--site-bg-panel);
+  backdrop-filter: blur(var(--site-blur)) saturate(1.15);
+  -webkit-backdrop-filter: blur(var(--site-blur)) saturate(1.15);
+  border: 1px solid var(--site-line);
+  box-shadow:
+    var(--site-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 3%, transparent);
 }
+
+/* ============================================================
+   侧边栏 — Mica 材质
+   ============================================================ */
+
+:root[data-has-sidebar] .sidebar-content {
+  padding-top: 0.75rem;
+  gap: 0.5rem;
+}
+
+:root[data-has-sidebar] .sidebar-content details {
+  border-radius: var(--site-radius);
+  overflow: hidden;
+  transition: background-color 0.2s var(--site-ease);
+}
+
+:root[data-has-sidebar] .sidebar-content details > summary {
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--site-radius-sm);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--sl-color-gray-2);
+  transition: background-color 0.2s var(--site-ease);
+}
+
+:root[data-has-sidebar] .sidebar-content details > summary:hover {
+  background: color-mix(in srgb, var(--sl-color-accent) 6%, transparent);
+}
+
+:root[data-has-sidebar] .sidebar-content a {
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--site-radius-sm);
+  color: var(--sl-color-gray-2);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  transition:
+    color 0.2s var(--site-ease),
+    background-color 0.2s var(--site-ease),
+    box-shadow 0.2s var(--site-ease);
+}
+
+:root[data-has-sidebar] .sidebar-content a:hover,
+:root[data-has-sidebar] .sidebar-content a:focus {
+  background: color-mix(in srgb, var(--sl-color-accent) 8%, transparent);
+  color: var(--sl-color-white);
+  text-decoration: none;
+}
+
+:root[data-has-sidebar] .sidebar-content a[aria-current='page'],
+:root[data-has-sidebar] .sidebar-content a[aria-current='page']:hover,
+:root[data-has-sidebar] .sidebar-content a[aria-current='page']:focus {
+  background: color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
+  color: var(--sl-color-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ============================================================
+   右侧栏 (TOC) — Mica 卡片
+   ============================================================ */
+
+:root[data-has-sidebar] .right-sidebar-panel {
+  padding-top: 0.85rem;
+}
+
+:root[data-has-sidebar] .right-sidebar-panel .sl-container {
+  padding: 1rem 1.1rem;
+  border-radius: var(--site-radius-lg);
+  background: var(--site-bg-panel);
+  backdrop-filter: blur(var(--site-blur)) saturate(1.15);
+  -webkit-backdrop-filter: blur(var(--site-blur)) saturate(1.15);
+  border: 1px solid var(--site-line);
+  box-shadow:
+    var(--site-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 3%, transparent);
+}
+
+/* ============================================================
+   链接样式
+   ============================================================ */
 
 .header .social-icons a,
 .sidebar-content a,
@@ -117,10 +414,10 @@ header.header > .header {
 .home-card__footer,
 .home-update-card__link h3 {
   transition:
-    color 180ms ease,
-    text-decoration-color 180ms ease,
-    text-underline-offset 180ms ease,
-    opacity 180ms ease;
+    color 180ms var(--site-ease),
+    text-decoration-color 180ms var(--site-ease),
+    text-underline-offset 180ms var(--site-ease),
+    opacity 180ms var(--site-ease);
 }
 
 .sidebar-content a,
@@ -137,92 +434,112 @@ header.header > .header {
 .sl-link-card a:hover {
   color: var(--site-link-hover);
   text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, currentColor 65%, transparent);
-  text-underline-offset: 0.16em;
+  text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
+  text-underline-offset: 0.18em;
 }
+
+/* ============================================================
+   Markdown 排版
+   ============================================================ */
 
 .sl-markdown-content :is(h2, h3, h4) {
   letter-spacing: -0.02em;
+  font-weight: 700;
 }
 
-:root[data-has-sidebar] main > .content-panel:first-of-type {
-  padding-top: 0.9rem;
-  padding-bottom: 0.45rem;
+.sl-markdown-content :is(h2) {
+  padding-bottom: 0.4em;
+  border-bottom: 1px solid var(--site-line);
 }
 
-:root[data-has-sidebar] main > .content-panel:first-of-type .sl-container {
+.sl-markdown-content :is(p, li, dd) {
+  line-height: 1.85;
+}
+
+.sl-markdown-content code {
+  font-family: var(--sl-font-mono);
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+  border-radius: var(--site-radius-sm);
+  background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+  color: var(--sl-color-accent);
+  border: 1px solid color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
+}
+
+.sl-markdown-content pre {
+  border-radius: var(--site-radius-lg);
+  border: 1px solid var(--site-line);
+  box-shadow: var(--site-shadow);
+}
+
+.sl-markdown-content pre code {
+  background: transparent;
+  border: 0;
   padding: 0;
-  max-width: var(--sl-content-width);
-  border-radius: 0.95rem;
-  background: color-mix(in srgb, var(--site-bg-panel) 100%, transparent);
+  color: inherit;
+  font-size: 0.875rem;
+}
+
+.sl-markdown-content blockquote {
+  border-radius: var(--site-radius);
+  border-left: 3px solid var(--sl-color-accent);
+  background: color-mix(in srgb, var(--sl-color-accent-low) 20%, transparent);
+}
+
+.sl-markdown-content table {
+  border-radius: var(--site-radius-lg);
   border: 1px solid var(--site-line);
+  overflow: hidden;
+}
+
+.sl-markdown-content table th {
+  background: color-mix(in srgb, var(--sl-color-accent) 6%, transparent);
+  font-weight: 700;
+}
+
+.sl-markdown-content table tr {
+  border-top: 1px solid var(--site-line);
+}
+
+/* Starlight Aside / Callout */
+.sl-markdown-content .starlight-aside {
+  border-radius: var(--site-radius-lg);
+  border: 1px solid var(--site-line);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   box-shadow: var(--site-shadow);
 }
 
-:root[data-has-sidebar] main > .content-panel:first-of-type h1 {
-  margin: 0;
-  padding: 1.35rem 1.65rem;
-  font-size: clamp(2.15rem, 3.1vw, 3.35rem);
-  line-height: 1.08;
-}
+/* ============================================================
+   分页链接
+   ============================================================ */
 
-:root[data-has-sidebar] main > .content-panel:nth-of-type(2) {
-  padding-top: 0.45rem;
-}
-
-:root[data-has-sidebar] main > .content-panel:nth-of-type(2) .sl-container {
-  padding: 1.6rem 1.65rem 1.9rem;
-  border-radius: 0.95rem;
-  background: color-mix(in srgb, var(--site-bg-panel) 100%, transparent);
+.pagination-links a {
+  border-radius: var(--site-radius-lg);
   border: 1px solid var(--site-line);
+  background: var(--site-bg-panel);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition:
+    border-color 0.2s var(--site-ease),
+    background-color 0.2s var(--site-ease),
+    transform 0.2s var(--site-ease),
+    box-shadow 0.2s var(--site-ease);
+}
+
+.pagination-links a:hover {
+  border-color: color-mix(in srgb, var(--sl-color-accent) 30%, var(--site-line));
+  background: var(--site-bg-panel-strong);
+  transform: translateY(-1px);
   box-shadow: var(--site-shadow);
 }
 
-:root[data-has-sidebar] .sidebar-content {
-  padding-top: 0.85rem;
-  gap: 0.8rem;
-}
-
-:root[data-has-sidebar] .sidebar-content details > summary {
-  padding: 0.3rem 0.5rem;
-}
-
-:root[data-has-sidebar] .sidebar-content a {
-  padding: 0.38rem 0.75rem;
-  border-radius: 0.55rem;
-  color: var(--sl-color-gray-2);
-}
-
-:root[data-has-sidebar] .sidebar-content a:hover,
-:root[data-has-sidebar] .sidebar-content a:focus {
-  background: color-mix(in srgb, var(--sl-color-accent-low) 36%, transparent);
-  color: var(--sl-color-white);
-  text-decoration: none;
-}
-
-:root[data-has-sidebar] .sidebar-content a[aria-current='page'],
-:root[data-has-sidebar] .sidebar-content a[aria-current='page']:hover,
-:root[data-has-sidebar] .sidebar-content a[aria-current='page']:focus {
-  background: color-mix(in srgb, var(--sl-color-accent-low) 48%, transparent);
-  color: var(--sl-color-white);
-  box-shadow: inset 2px 0 0 var(--sl-color-accent);
-  text-decoration: none;
-}
-
-:root[data-has-sidebar] .right-sidebar-panel {
-  padding-top: 0.95rem;
-}
-
-:root[data-has-sidebar] .right-sidebar-panel .sl-container {
-  padding: 1rem 1.1rem;
-  border-radius: 0.9rem;
-  background: color-mix(in srgb, var(--site-bg-panel) 100%, transparent);
-  border: 1px solid var(--site-line);
-  box-shadow: var(--site-shadow);
-}
+/* ============================================================
+   首页布局
+   ============================================================ */
 
 :root:not([data-has-sidebar]) main:has(.home-content) {
-  padding-top: clamp(0.75rem, 1.5vw, 1.25rem);
+  padding-top: clamp(0.5rem, 1.5vw, 1.25rem);
 }
 
 :root:not([data-has-sidebar]) main:has(.home-content) > .content-panel:first-of-type {
@@ -230,7 +547,7 @@ header.header > .header {
 }
 
 :root:not([data-has-sidebar]) main:has(.home-content) > .content-panel:last-of-type {
-  padding-top: clamp(1rem, 2vw, 1.5rem);
+  padding-top: clamp(0.75rem, 2vw, 1.5rem);
 }
 
 .home-content {
@@ -245,9 +562,15 @@ header.header > .header {
 
 .home-section__header h2 {
   margin: 0;
-  font-size: clamp(1.45rem, 1.2rem + 0.8vw, 2rem);
+  font-size: clamp(1.4rem, 1.2rem + 0.7vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1.15;
 }
+
+/* ============================================================
+   首页卡片 (旧版兼容)
+   ============================================================ */
 
 .home-card-grid,
 .home-update-list {
@@ -267,15 +590,19 @@ header.header > .header {
   position: relative;
   overflow: hidden;
   height: 100%;
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 0.95rem;
-  background: color-mix(in srgb, var(--site-bg-panel) 100%, transparent);
-  box-shadow: var(--site-shadow);
+  border: 1px solid var(--site-line);
+  border-radius: var(--site-radius-lg);
+  background: var(--site-bg-panel);
+  backdrop-filter: blur(var(--site-blur)) saturate(1.15);
+  -webkit-backdrop-filter: blur(var(--site-blur)) saturate(1.15);
+  box-shadow:
+    var(--site-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 3%, transparent);
   transition:
-    border-color 180ms ease,
-    background-color 180ms ease,
-    transform 180ms ease,
-    box-shadow 180ms ease;
+    border-color 0.25s var(--site-ease),
+    background-color 0.25s var(--site-ease),
+    transform 0.25s var(--site-ease),
+    box-shadow 0.25s var(--site-ease);
 }
 
 .home-card::before,
@@ -287,9 +614,11 @@ header.header > .header {
 .home-card:focus-within,
 .home-update-card:hover,
 .home-update-card:focus-within {
-  border-color: color-mix(in srgb, var(--sl-color-accent) 26%, var(--sl-color-gray-5));
-  transform: translateY(-2px);
-  box-shadow: var(--site-shadow-strong);
+  border-color: color-mix(in srgb, var(--sl-color-accent) 30%, var(--site-line));
+  transform: translateY(-3px);
+  box-shadow:
+    var(--site-shadow-hover),
+    inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 5%, transparent);
 }
 
 .home-card__link,
@@ -307,9 +636,9 @@ header.header > .header {
 
 .home-card__eyebrow,
 .home-update-card__date {
-  color: var(--sl-color-accent-high);
-  font-size: 0.9rem;
-  font-weight: 700;
+  color: var(--sl-color-accent);
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .home-card h3,
@@ -318,12 +647,14 @@ header.header > .header {
   font-size: 1.16rem;
   line-height: 1.25;
   letter-spacing: -0.02em;
+  font-weight: 700;
 }
 
 .home-card p,
 .home-update-card p {
   margin: 0;
   color: var(--sl-color-gray-2);
+  line-height: 1.6;
 }
 
 .home-card__footer {
@@ -331,19 +662,19 @@ header.header > .header {
   align-items: center;
   gap: 0.45rem;
   color: var(--site-link);
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
 }
 
 .home-card__footer::after {
-  content: '→';
+  content: '\2192';
   transform: translateX(0);
-  transition: transform 180ms ease;
+  transition: transform 0.2s var(--site-ease);
 }
 
 .home-card:hover .home-card__footer::after,
 .home-card:focus-within .home-card__footer::after {
-  transform: translateX(0.2rem);
+  transform: translateX(0.25rem);
 }
 
 .home-update-list {
@@ -363,13 +694,17 @@ header.header > .header {
   color: var(--site-link-hover);
 }
 
+/* ============================================================
+   响应式
+   ============================================================ */
+
 @media (max-width: 50rem) {
   .site-title {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   .site-title img {
-    height: 2rem;
+    height: 1.85rem;
   }
 
   :root[data-has-sidebar] main > .content-panel:first-of-type h1,
@@ -384,5 +719,18 @@ header.header > .header {
   .home-card__link,
   .home-update-card__link {
     padding: 1.15rem 1.2rem;
+  }
+}
+
+/* ============================================================
+   动画减弱
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
   }
 }

@@ -28,34 +28,52 @@ const latestArticles = getVisibleArticles(changelog?.articles ?? [], locale).sli
     href: toRelativePath(Astro.url.pathname, targetPathname)
   };
 });
+
+const categoryIcons: Record<string, string> = {
+  changelog: '<path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/>',
+  faq: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 1-1 1.7v.5"/><line x1="12" y1="17" x2="12" y2="17"/>',
+  development: '<polyline points="8 8 4 12 8 16"/><polyline points="16 8 20 12 16 16"/><line x1="14" y1="6" x2="10" y2="18"/>',
+  others: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>'
+};
 ---
 
-<div class="modern-home home-content">
-  <!-- Categories Section -->
-  <section class="modern-section" aria-labelledby={`home-${locale}-categories`}>
+<div class="home-content mica-home">
+  <section class="hero" aria-label={copy.title}>
+    <div class="hero-glow"></div>
+    <div class="hero-body">
+      <h1 class="hero-title">{copy.title}</h1>
+      <p class="hero-desc">{copy.description}</p>
+    </div>
+  </section>
+
+  <section class="mica-section" aria-labelledby={`home-${locale}-categories`}>
     <div class="section-header">
       <h2 id={`home-${locale}-categories`}>{copy.sections.categories}</h2>
       <div class="header-line"></div>
     </div>
-    
+
     <div class="bento-grid">
       {siteData.categories.map((category) => {
         const visibleArticles = getVisibleArticles(category.articles, locale);
         const targetPathname = buildDocsCategoryLink(locale, category.slug);
+        const iconPath = categoryIcons[category.slug] ?? categoryIcons.others;
         return (
           <a href={toRelativePath(Astro.url.pathname, targetPathname)} class="bento-card">
-            <div class="bento-card-bg"></div>
-            <div class="bento-card-content">
-              <div class="bento-card-header">
-                <h3>{getLocalizedValue(category.titles, locale)}</h3>
-                <span class="article-badge">{visibleArticles.length} {copy.labels.articleCount}</span>
+            <div class="card-glow"></div>
+            <div class="card-body">
+              <div class="card-top">
+                <div class="card-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={iconPath} />
+                </div>
+                <span class="card-badge">{visibleArticles.length} {copy.labels.articleCount}</span>
               </div>
-              <p class="bento-description">{getLocalizedValue(category.descriptions, locale) || copy.labels.noDescription}</p>
-              <div class="bento-footer">
+              <h3 class="card-title">{getLocalizedValue(category.titles, locale)}</h3>
+              <p class="card-desc">{getLocalizedValue(category.descriptions, locale) || copy.labels.noDescription}</p>
+              <div class="card-footer">
                 <span>{copy.labels.openCategory}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-arrow">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-arrow">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
                 </svg>
               </div>
             </div>
@@ -65,26 +83,25 @@ const latestArticles = getVisibleArticles(changelog?.articles ?? [], locale).sli
     </div>
   </section>
 
-  <!-- Latest Updates Section -->
-  <section class="modern-section" aria-labelledby={`home-${locale}-latest`}>
+  <section class="mica-section" aria-labelledby={`home-${locale}-latest`}>
     <div class="section-header">
       <h2 id={`home-${locale}-latest`}>{copy.sections.latest}</h2>
       <div class="header-line"></div>
     </div>
-    
+
     <div class="updates-list">
       {latestArticles.map((article) => (
         <a href={article.href} class="update-row">
           <div class="update-date">
             <span class="date-text">{article.date}</span>
           </div>
-          <div class="update-content">
+          <div class="update-body">
             <h3 class="update-title">{article.title}</h3>
             <p class="update-desc">{article.description || copy.labels.noDescription}</p>
           </div>
-          <div class="update-action">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
+          <div class="update-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </div>
         </a>
@@ -94,25 +111,101 @@ const latestArticles = getVisibleArticles(changelog?.articles ?? [], locale).sli
 </div>
 
 <style>
-  /* Base Container */
-  .modern-home {
+  .mica-home {
     display: flex;
     flex-direction: column;
-    gap: 4rem;
-    margin-top: 1rem;
-    animation: fade-in 0.6s ease-out;
+    gap: clamp(2.5rem, 4vw, 3.5rem);
+    animation: mica-fade-in 0.6s cubic-bezier(0.33, 0, 0, 1);
   }
 
-  @keyframes fade-in {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  @keyframes mica-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
-  /* Section Headers */
-  .modern-section {
+  /* ============================================================
+     Hero
+     ============================================================ */
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--site-radius-xl, 16px);
+    padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
+    background: var(--site-bg-panel);
+    backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.2);
+    -webkit-backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.2);
+    border: 1px solid var(--site-line);
+    box-shadow:
+      var(--site-shadow),
+      inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 5%, transparent);
+  }
+
+  .hero-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        ellipse 50% 80% at 80% 50%,
+        color-mix(in srgb, var(--sl-color-accent) 14%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 40% 60% at 15% 30%,
+        color-mix(in srgb, var(--sl-color-accent-high) 8%, transparent),
+        transparent 65%
+      );
+    opacity: 1;
+  }
+
+  .hero-body {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.6rem;
+    max-width: 42rem;
+  }
+
+  .hero-title {
+    margin: 0;
+    font-size: clamp(1.75rem, 1.2rem + 2vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    color: var(--sl-color-white);
+    background: linear-gradient(
+      135deg,
+      var(--sl-color-white),
+      color-mix(in srgb, var(--sl-color-accent) 60%, var(--sl-color-white))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-desc {
+    margin: 0;
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.15rem);
+    line-height: 1.65;
+    color: var(--sl-color-gray-2);
+  }
+
+  /* ============================================================
+     Section Header
+     ============================================================ */
+
+  .mica-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
   }
 
   .section-header {
@@ -123,21 +216,27 @@ const latestArticles = getVisibleArticles(changelog?.articles ?? [], locale).sli
 
   .section-header h2 {
     margin: 0;
-    font-size: clamp(1.5rem, 2vw + 1rem, 1.8rem);
+    font-size: clamp(1.35rem, 1.15rem + 0.7vw, 1.75rem);
     font-weight: 700;
     color: var(--sl-color-white);
     letter-spacing: -0.02em;
-    position: relative;
+    white-space: nowrap;
   }
 
   .header-line {
     flex-grow: 1;
     height: 1px;
-    background: linear-gradient(90deg, var(--site-line) 0%, transparent 100%);
-    opacity: 0.6;
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--sl-color-gray-4) 40%, transparent),
+      transparent
+    );
   }
 
-  /* Bento Grid for Categories */
+  /* ============================================================
+     Bento Grid
+     ============================================================ */
+
   .bento-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -146,161 +245,215 @@ const latestArticles = getVisibleArticles(changelog?.articles ?? [], locale).sli
 
   .bento-card {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    border-radius: 1rem;
-    padding: 1px; /* for gradient border effect */
+    display: block;
+    border-radius: var(--site-radius-lg, 12px);
+    padding: 1px;
     background: var(--site-line);
     text-decoration: none !important;
     overflow: hidden;
-    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+    transition:
+      transform 0.3s cubic-bezier(0.33, 0, 0, 1),
+      box-shadow 0.3s var(--site-ease),
+      background 0.3s var(--site-ease);
   }
 
-  .bento-card-bg {
+  .card-glow {
     position: absolute;
     inset: 1px;
-    background: var(--site-bg-panel);
-    border-radius: calc(1rem - 1px);
+    border-radius: calc(var(--site-radius-lg, 12px) - 1px);
+    background:
+      radial-gradient(
+        ellipse 80% 50% at 50% 0%,
+        color-mix(in srgb, var(--sl-color-accent) 8%, transparent),
+        transparent 70%
+      ),
+      var(--site-bg-panel);
+    backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.15);
+    -webkit-backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.15);
     z-index: 0;
-    transition: background 0.3s ease;
+    transition: background 0.3s var(--site-ease);
   }
 
-  .bento-card-content {
+  .card-body {
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 1.5rem;
+    padding: clamp(1.25rem, 2vw, 1.6rem);
   }
 
   .bento-card:hover {
-    transform: translateY(-4px) scale(1.01);
-    box-shadow: var(--site-shadow-strong);
-    background: linear-gradient(135deg, var(--sl-color-accent), var(--site-line));
+    transform: translateY(-4px);
+    box-shadow: var(--site-shadow-hover);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--sl-color-accent) 30%, var(--site-line)),
+      var(--site-line)
+    );
   }
 
-  .bento-card:hover .bento-card-bg {
-    background: var(--site-bg-panel-strong);
+  .bento-card:hover .card-glow {
+    background:
+      radial-gradient(
+        ellipse 80% 50% at 50% 0%,
+        color-mix(in srgb, var(--sl-color-accent) 16%, transparent),
+        transparent 70%
+      ),
+      var(--site-bg-panel-strong);
   }
 
-  .bento-card-header {
+  .card-top {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     gap: 1rem;
   }
 
-  .bento-card-header h3 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--sl-color-white);
-    line-height: 1.3;
-    transition: color 0.2s ease;
+  .card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--site-radius, 8px);
+    background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+    color: var(--sl-color-accent);
+    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
+    transition:
+      background-color 0.3s var(--site-ease),
+      color 0.3s var(--site-ease),
+      transform 0.3s cubic-bezier(0.33, 0, 0, 1);
   }
 
-  .bento-card:hover .bento-card-header h3 {
-    color: var(--site-link-hover);
+  .bento-card:hover .card-icon {
+    background: color-mix(in srgb, var(--sl-color-accent) 18%, transparent);
+    transform: scale(1.05);
   }
 
-  .article-badge {
+  .card-badge {
     flex-shrink: 0;
     font-size: 0.75rem;
     font-weight: 600;
-    padding: 0.2rem 0.6rem;
-    background: color-mix(in srgb, var(--sl-color-accent-low) 50%, transparent);
-    color: var(--sl-color-accent-high);
-    border-radius: 2rem;
-    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 20%, transparent);
+    padding: 0.25rem 0.7rem;
+    background: color-mix(in srgb, var(--sl-color-accent-low) 35%, transparent);
+    color: var(--sl-color-accent);
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 12%, transparent);
+    line-height: 1.5;
   }
 
-  .bento-description {
+  .card-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    transition: color 0.2s var(--site-ease);
+  }
+
+  .bento-card:hover .card-title {
+    color: var(--site-link-hover);
+  }
+
+  .card-desc {
     margin: 0 0 1.5rem 0;
-    font-size: 0.95rem;
+    font-size: 0.925rem;
     color: var(--sl-color-gray-2);
     line-height: 1.6;
     flex-grow: 1;
   }
 
-  .bento-footer {
+  .card-footer {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     font-weight: 600;
     color: var(--site-link);
     margin-top: auto;
   }
 
   .icon-arrow {
-    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: transform 0.3s cubic-bezier(0.33, 0, 0, 1);
   }
 
   .bento-card:hover .icon-arrow {
     transform: translateX(4px);
   }
 
-  /* Latest Updates List */
+  /* ============================================================
+     Updates List
+     ============================================================ */
+
   .updates-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.625rem;
   }
 
   .update-row {
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    padding: 1.25rem 1.5rem;
+    padding: 1.1rem 1.4rem;
     background: var(--site-bg-panel);
+    backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.1);
+    -webkit-backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.1);
     border: 1px solid var(--site-line);
-    border-radius: 0.75rem;
+    border-radius: var(--site-radius-lg, 12px);
     text-decoration: none !important;
-    transition: all 0.2s ease;
+    box-shadow: var(--site-shadow);
+    transition:
+      border-color 0.25s var(--site-ease),
+      background-color 0.25s var(--site-ease),
+      transform 0.25s cubic-bezier(0.33, 0, 0, 1),
+      box-shadow 0.25s var(--site-ease);
   }
 
   .update-row:hover {
     background: var(--site-bg-panel-strong);
-    border-color: color-mix(in srgb, var(--sl-color-accent) 40%, var(--site-line));
+    border-color: color-mix(in srgb, var(--sl-color-accent) 30%, var(--site-line));
     transform: translateX(4px);
-    box-shadow: var(--site-shadow);
+    box-shadow: var(--site-shadow-strong);
   }
 
   .update-date {
     flex-shrink: 0;
-    width: 100px;
+    width: 6.5rem;
   }
 
   .date-text {
     font-family: var(--sl-font-mono), monospace;
-    font-size: 0.85rem;
+    font-size: 0.825rem;
     font-weight: 500;
     color: var(--sl-color-gray-3);
+    transition: color 0.2s var(--site-ease);
   }
 
   .update-row:hover .date-text {
     color: var(--sl-color-accent);
   }
 
-  .update-content {
+  .update-body {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    min-width: 0; /* allows text truncation */
+    gap: 0.2rem;
+    min-width: 0;
   }
 
   .update-title {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: var(--sl-color-white);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: color 0.2s ease;
+    transition: color 0.2s var(--site-ease);
   }
 
   .update-row:hover .update-title {
@@ -309,54 +462,83 @@ const latestArticles = getVisibleArticles(changelog?.articles ?? [], locale).sli
 
   .update-desc {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     color: var(--sl-color-gray-3);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .update-action {
+  .update-arrow {
     flex-shrink: 0;
     color: var(--sl-color-gray-4);
     opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform: translateX(-8px);
+    transition:
+      opacity 0.3s cubic-bezier(0.33, 0, 0, 1),
+      transform 0.3s cubic-bezier(0.33, 0, 0, 1),
+      color 0.2s var(--site-ease);
   }
 
-  .update-row:hover .update-action {
+  .update-row:hover .update-arrow {
     opacity: 1;
     transform: translateX(0);
     color: var(--sl-color-accent);
   }
 
-  /* Responsive Adjustments */
+  /* ============================================================
+     Responsive
+     ============================================================ */
+
   @media (max-width: 768px) {
     .update-row {
       flex-direction: column;
       align-items: flex-start;
       gap: 0.5rem;
-      padding: 1rem 1.25rem;
+      padding: 1rem 1.2rem;
     }
-    
+
     .update-date {
       width: auto;
     }
-    
-    .update-content {
+
+    .update-body {
       width: 100%;
     }
-    
-    .update-title, .update-desc {
+
+    .update-title,
+    .update-desc {
       white-space: normal;
     }
-    
-    .update-action {
+
+    .update-arrow {
       display: none;
     }
-    
+
     .bento-grid {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mica-home {
+      animation: none;
+    }
+
+    .bento-card,
+    .update-row,
+    .card-icon,
+    .icon-arrow,
+    .update-arrow {
+      transition: none;
+    }
+
+    .bento-card:hover {
+      transform: none;
+    }
+
+    .update-row:hover {
+      transform: none;
     }
   }
 </style>
