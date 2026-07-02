@@ -1,6 +1,5 @@
 node_modules
 .astro
-.dr-cache
 dist
 public/assets
 src/content/docs

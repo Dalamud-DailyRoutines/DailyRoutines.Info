@@ -6,8 +6,8 @@ import matter from 'gray-matter';
 const rootDir = process.cwd();
 const articlesDir = path.join(rootDir, 'articles');
 const assetsDir = path.join(rootDir, 'assets');
-const cacheDir = path.join(rootDir, '.dr-cache');
-const siteDataSnapshotPath = path.join(cacheDir, 'site-data.json');
+const generatedDir = path.join(rootDir, '.astro', 'generated');
+const siteDataSnapshotPath = path.join(generatedDir, 'site-data.json');
 const require = createRequire(import.meta.url);
 const gitDatesCache = new Map();
 let gitDatesLoaded = false;
@@ -784,7 +784,7 @@ function readSiteDataSnapshot() {
 }
 
 function writeSiteDataSnapshot(siteData) {
-  fs.mkdirSync(cacheDir, { recursive: true });
+  fs.mkdirSync(generatedDir, { recursive: true });
   fs.writeFileSync(siteDataSnapshotPath, JSON.stringify(siteData), 'utf8');
 }
 
