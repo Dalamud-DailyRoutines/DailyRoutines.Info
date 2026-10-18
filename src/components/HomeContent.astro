@@ -252,9 +252,11 @@ const categoryIcons: Record<string, string> = {
 
   .hero-title {
     margin: 0;
+    margin-block-end: -0.1em;
+    padding-block-end: 0.1em;
     font-size: clamp(2rem, 1.25rem + 2.4vw, 3rem);
     font-weight: 700;
-    line-height: 1.08;
+    line-height: 1.16;
     letter-spacing: -0.035em;
     text-wrap: balance;
     color: var(--sl-color-white);
@@ -524,41 +526,60 @@ const categoryIcons: Record<string, string> = {
   .updates-list {
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
+    gap: 0.6rem;
   }
 
   .update-row {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    padding: 0.95rem 1.25rem;
-    border: 1px solid color-mix(in srgb, var(--site-line-strong) 65%, transparent);
+    gap: 1.1rem;
+    padding: calc(0.7rem + 1px) calc(1rem + 1px);
     border-radius: var(--site-radius-lg, 12px);
-    background: var(--site-bg-panel-strong);
-    backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.1);
-    -webkit-backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.1);
-    box-shadow: var(--site-shadow);
+    background: var(--site-line);
+    overflow: hidden;
     text-decoration: none !important;
     transition:
-      border-color 0.25s var(--site-ease),
-      background-color 0.25s var(--site-ease),
-      transform 0.25s cubic-bezier(0.33, 0, 0, 1),
-      box-shadow 0.25s var(--site-ease);
+      background 0.3s var(--site-ease),
+      transform 0.3s cubic-bezier(0.33, 0, 0, 1),
+      box-shadow 0.3s var(--site-ease);
+  }
+
+  .update-row::before {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    z-index: 0;
+    border-radius: calc(var(--site-radius-lg, 12px) - 1px);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--site-bg-panel-strong) 58%, transparent),
+        transparent 68%
+      ),
+      var(--site-bg-panel);
+    box-shadow: inset 0 1px 0 var(--site-edge-highlight);
+    transition: background 0.3s var(--site-ease);
+  }
+
+  .update-row > * {
+    position: relative;
+    z-index: 1;
   }
 
   .update-date {
     display: flex;
     align-items: center;
-    gap: 0.7rem;
+    gap: 0.6rem;
     flex-shrink: 0;
-    width: 7.4rem;
+    width: 8rem;
   }
 
   .update-date::before {
     content: '';
     flex-shrink: 0;
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: color-mix(in srgb, var(--sl-color-accent) 55%, var(--sl-color-gray-4));
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
@@ -568,12 +589,20 @@ const categoryIcons: Record<string, string> = {
   }
 
   .date-text {
+    padding: 0.22rem 0.5rem;
+    border: 1px solid var(--site-line);
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--sl-color-gray-5) 42%, transparent);
     font-family: var(--sl-font-mono), monospace;
-    font-size: 0.8rem;
+    font-size: 0.76rem;
     font-weight: 500;
-    color: var(--sl-color-gray-3);
+    line-height: 1.4;
+    color: var(--sl-color-gray-2);
     font-variant-numeric: tabular-nums;
-    transition: color 0.2s var(--site-ease);
+    transition:
+      color 0.2s var(--site-ease),
+      background-color 0.2s var(--site-ease),
+      border-color 0.2s var(--site-ease);
   }
 
   .update-body {
@@ -607,24 +636,47 @@ const categoryIcons: Record<string, string> = {
   }
 
   .update-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
-    color: var(--sl-color-gray-4);
-    opacity: 0.45;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--site-line);
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--site-bg-panel-strong) 55%, transparent);
+    color: var(--sl-color-gray-3);
     transition:
-      opacity 0.25s var(--site-ease),
-      transform 0.25s cubic-bezier(0.33, 0, 0, 1),
-      color 0.2s var(--site-ease);
+      color 0.25s var(--site-ease),
+      background-color 0.25s var(--site-ease),
+      border-color 0.25s var(--site-ease),
+      transform 0.25s cubic-bezier(0.33, 0, 0, 1);
   }
 
   @media (hover: hover) {
     .update-row:hover {
-      border-color: color-mix(in srgb, var(--sl-color-accent) 32%, var(--site-line));
-      background: var(--site-bg-panel-solid);
-      transform: translateX(3px);
+      background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--sl-color-accent) 42%, var(--site-line)),
+        color-mix(in srgb, #6b5bd2 20%, var(--site-line))
+      );
+      transform: translateY(-2px);
       box-shadow: var(--site-shadow-strong);
     }
 
+    .update-row:hover::before {
+      background:
+        linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--sl-color-accent) 9%, transparent),
+          transparent 68%
+        ),
+        var(--site-bg-panel-strong);
+    }
+
     .update-row:hover .date-text {
+      border-color: color-mix(in srgb, var(--sl-color-accent) 24%, transparent);
+      background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
       color: var(--sl-color-accent);
     }
 
@@ -638,18 +690,34 @@ const categoryIcons: Record<string, string> = {
     }
 
     .update-row:hover .update-arrow {
-      opacity: 1;
+      border-color: var(--sl-color-accent);
+      background: var(--sl-color-accent);
+      color: var(--sl-color-bg);
       transform: translateX(2px);
-      color: var(--sl-color-accent);
     }
   }
 
   .update-row:focus-visible {
-    border-color: color-mix(in srgb, var(--sl-color-accent) 45%, var(--site-line));
-    background: var(--site-bg-panel-solid);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--sl-color-accent) 45%, var(--site-line)),
+      color-mix(in srgb, #6b5bd2 20%, var(--site-line))
+    );
+    box-shadow: var(--site-shadow-strong);
+  }
+
+  .update-row:focus-visible::before {
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--sl-color-accent) 9%, transparent),
+        transparent 68%
+      ),
+      var(--site-bg-panel-strong);
   }
 
   .update-row:focus-visible .date-text {
+    border-color: color-mix(in srgb, var(--sl-color-accent) 24%, transparent);
     color: var(--sl-color-accent);
   }
 
@@ -658,8 +726,9 @@ const categoryIcons: Record<string, string> = {
   }
 
   .update-row:focus-visible .update-arrow {
-    opacity: 1;
-    color: var(--sl-color-accent);
+    border-color: var(--sl-color-accent);
+    background: var(--sl-color-accent);
+    color: var(--sl-color-bg);
   }
 
   /* ============================================================
@@ -704,11 +773,15 @@ const categoryIcons: Record<string, string> = {
       margin-top: 0.3rem;
     }
 
+    .updates-list {
+      gap: 0.5rem;
+    }
+
     .update-row {
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.3rem;
-      padding: 0.9rem 1.1rem;
+      gap: 0.35rem;
+      padding: calc(0.75rem + 1px) calc(0.8rem + 1px);
     }
 
     .update-date {
@@ -731,13 +804,9 @@ const categoryIcons: Record<string, string> = {
   }
 
   @media (hover: none) {
-    .card-glow,
-    .update-row {
+    .card-glow {
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
-    }
-
-    .card-glow {
       background: var(--site-bg-panel-strong);
     }
   }
