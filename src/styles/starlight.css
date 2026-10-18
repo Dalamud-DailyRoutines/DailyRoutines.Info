@@ -58,6 +58,8 @@
   --site-link-hover: #00538a;
   --site-title: #005a9e;
 
+  --site-edge-highlight: rgba(255, 255, 255, 0.72);
+
   /* 圆角 */
   --site-radius-sm: 6px;
   --site-radius: 8px;
@@ -118,6 +120,8 @@
   --site-link: #4cc2ff;
   --site-link-hover: #99dcff;
   --site-title: #99dcff;
+
+  --site-edge-highlight: rgba(255, 255, 255, 0.07);
 
   --sl-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --sl-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -213,12 +217,24 @@ header.header {
   border-bottom: 1px solid var(--site-line);
   transition:
     background-color 0.3s var(--site-ease),
-    border-color 0.3s var(--site-ease);
+    border-color 0.3s var(--site-ease),
+    box-shadow 0.3s var(--site-ease);
 }
 
 :root[data-theme='dark'] header.header {
   background: color-mix(in srgb, var(--site-bg-panel) 68%, transparent);
   border-bottom: 1px solid var(--site-line);
+}
+
+header.header[data-scrolled] {
+  background: color-mix(in srgb, var(--site-bg-panel-strong) 82%, transparent);
+  border-bottom-color: var(--site-line-strong);
+  box-shadow: 0 14px 32px -28px rgba(0, 0, 0, 0.55);
+}
+
+:root[data-theme='dark'] header.header[data-scrolled] {
+  background: color-mix(in srgb, var(--site-bg-panel-strong) 78%, transparent);
+  box-shadow: 0 14px 32px -24px rgba(0, 0, 0, 0.7);
 }
 
 header.header > .header {
@@ -495,7 +511,7 @@ dialog::backdrop {
   border: 1px solid var(--site-line);
   box-shadow:
     var(--site-shadow),
-    inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 5%, transparent);
+    inset 0 1px 0 var(--site-edge-highlight);
   overflow: clip;
 }
 
@@ -527,7 +543,7 @@ dialog::backdrop {
   border: 1px solid var(--site-line);
   box-shadow:
     var(--site-shadow),
-    inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 3%, transparent);
+    inset 0 1px 0 var(--site-edge-highlight);
 }
 
 /* ============================================================
@@ -548,7 +564,7 @@ dialog::backdrop {
   border: 1px solid var(--site-line);
   box-shadow:
     var(--site-shadow),
-    inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 3%, transparent);
+    inset 0 1px 0 var(--site-edge-highlight);
 }
 
 /* ============================================================
@@ -576,9 +592,7 @@ dialog::backdrop {
 .sidebar-content a,
 .pagination-links a,
 .sl-markdown-content a:not(.sl-link-button):not(.anchor-link),
-.sl-link-card a,
-.home-card__footer,
-.home-update-card__link h3 {
+.sl-link-card a {
   transition:
     color 180ms var(--site-ease),
     text-decoration-color 180ms var(--site-ease),
@@ -716,150 +730,6 @@ dialog::backdrop {
   padding-top: clamp(0.75rem, 2vw, 1.5rem);
 }
 
-.home-content {
-  display: grid;
-  gap: clamp(2rem, 3vw, 2.75rem);
-}
-
-.home-section {
-  display: grid;
-  gap: 1rem;
-}
-
-.home-section__header h2 {
-  margin: 0;
-  font-size: clamp(1.4rem, 1.2rem + 0.7vw, 1.85rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-}
-
-/* ============================================================
-   首页卡片 (旧版兼容)
-   ============================================================ */
-
-.home-card-grid,
-.home-update-list {
-  display: grid;
-  gap: 1rem;
-  align-items: stretch;
-}
-
-.home-card-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-auto-rows: 1fr;
-}
-
-.home-card,
-.home-update-card {
-  margin: 0 !important;
-  position: relative;
-  overflow: hidden;
-  height: 100%;
-  border: 1px solid var(--site-line);
-  border-radius: var(--site-radius-lg);
-  background: var(--site-bg-panel);
-  backdrop-filter: blur(var(--site-blur)) saturate(1.2);
-  -webkit-backdrop-filter: blur(var(--site-blur)) saturate(1.2);
-  box-shadow:
-    var(--site-shadow),
-    inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 3%, transparent);
-  transition:
-    border-color 0.25s var(--site-ease),
-    background-color 0.25s var(--site-ease),
-    transform 0.25s var(--site-ease),
-    box-shadow 0.25s var(--site-ease);
-}
-
-.home-card::before,
-.home-update-card::before {
-  display: none;
-}
-
-.home-card:hover,
-.home-card:focus-within,
-.home-update-card:hover,
-.home-update-card:focus-within {
-  border-color: color-mix(in srgb, var(--sl-color-accent) 30%, var(--site-line));
-  transform: translateY(-3px);
-  box-shadow:
-    var(--site-shadow-hover),
-    inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 5%, transparent);
-}
-
-.home-card__link,
-.home-update-card__link {
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  gap: 0.8rem;
-  height: 100%;
-  padding: 1.35rem 1.4rem;
-  color: inherit;
-  text-decoration: none;
-  position: relative;
-  z-index: 1;
-}
-
-.home-card__eyebrow,
-.home-update-card__date {
-  color: var(--sl-color-accent);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.home-card h3,
-.home-update-card h3 {
-  margin: 0;
-  font-size: 1.16rem;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-  font-weight: 700;
-}
-
-.home-card p,
-.home-update-card p {
-  margin: 0;
-  color: var(--sl-color-gray-2);
-  line-height: 1.6;
-}
-
-.home-card__footer {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  color: var(--site-link);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.home-card__footer::after {
-  content: '\2192';
-  transform: translateX(0);
-  transition: transform 0.2s var(--site-ease);
-}
-
-.home-card:hover .home-card__footer::after,
-.home-card:focus-within .home-card__footer::after {
-  transform: translateX(0.25rem);
-}
-
-.home-update-list {
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-}
-
-.home-update-card__link {
-  grid-template-rows: auto auto 1fr;
-}
-
-.home-update-card__link h3 {
-  color: var(--sl-color-white);
-}
-
-.home-update-card:hover .home-update-card__link h3,
-.home-update-card:focus-within .home-update-card__link h3 {
-  color: var(--site-link-hover);
-}
-
 /* ============================================================
    响应式
    ============================================================ */
@@ -878,13 +748,51 @@ dialog::backdrop {
     padding-inline: 1.2rem;
   }
 
-  .home-card-grid {
-    grid-template-columns: minmax(0, 1fr);
+  /* 无侧栏的首页没有折叠菜单，页头保留主题与语言切换 */
+  :root:not([data-has-sidebar]) .header {
+    gap: 0.5rem;
   }
 
-  .home-card__link,
-  .home-update-card__link {
-    padding: 1.15rem 1.2rem;
+  :root:not([data-has-sidebar]) .header .right-group {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  :root:not([data-has-sidebar]) .header .social-icons {
+    display: none;
+  }
+
+  :root:not([data-has-sidebar]) .header .right-group label {
+    --sl-inline-padding: 0.2rem;
+  }
+
+  :root:not([data-has-sidebar]) .header .right-group select {
+    font-size: var(--sl-text-xs);
+  }
+
+  :root:not([data-has-sidebar]) starlight-theme-select label {
+    --sl-select-width: 3em !important;
+  }
+
+  :root:not([data-has-sidebar]) starlight-theme-select select {
+    color: transparent;
+  }
+
+  :root:not([data-has-sidebar]) starlight-lang-select label {
+    --sl-select-width: 8em !important;
+  }
+}
+
+@media (max-width: 30rem) {
+  :root:not([data-has-sidebar]) .site-title span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 

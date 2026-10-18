@@ -37,9 +37,9 @@ const categoryIcons: Record<string, string> = {
 };
 ---
 
-<div class="home-content mica-home">
-  <section class="hero" aria-label={copy.title}>
-    <div class="hero-glow"></div>
+<div class="home-content mica-home not-content">
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
     <div class="hero-body">
       <h1 class="hero-title">{copy.title}</h1>
       <p class="hero-desc">{copy.description}</p>
@@ -49,7 +49,7 @@ const categoryIcons: Record<string, string> = {
   <section class="mica-section" aria-labelledby={`home-${locale}-categories`}>
     <div class="section-header">
       <h2 id={`home-${locale}-categories`}>{copy.sections.categories}</h2>
-      <div class="header-line"></div>
+      <div class="header-line" aria-hidden="true"></div>
     </div>
 
     <div class="bento-grid">
@@ -59,11 +59,12 @@ const categoryIcons: Record<string, string> = {
         const iconPath = categoryIcons[category.slug] ?? categoryIcons.others;
         return (
           <a href={toRelativePath(Astro.url.pathname, targetPathname)} class="bento-card">
-            <div class="card-glow"></div>
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="card-spotlight" aria-hidden="true"></div>
             <div class="card-body">
               <div class="card-top">
                 <div class="card-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={iconPath} />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={iconPath} />
                 </div>
                 <span class="card-badge">{visibleArticles.length} {copy.labels.articleCount}</span>
               </div>
@@ -71,7 +72,7 @@ const categoryIcons: Record<string, string> = {
               <p class="card-desc">{getLocalizedValue(category.descriptions, locale) || copy.labels.noDescription}</p>
               <div class="card-footer">
                 <span>{copy.labels.openCategory}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-arrow" aria-hidden="true">
                   <line x1="5" y1="12" x2="19" y2="12" />
                   <polyline points="12 5 19 12 12 19" />
                 </svg>
@@ -86,7 +87,7 @@ const categoryIcons: Record<string, string> = {
   <section class="mica-section" aria-labelledby={`home-${locale}-latest`}>
     <div class="section-header">
       <h2 id={`home-${locale}-latest`}>{copy.sections.latest}</h2>
-      <div class="header-line"></div>
+      <div class="header-line" aria-hidden="true"></div>
     </div>
 
     <div class="updates-list">
@@ -99,8 +100,8 @@ const categoryIcons: Record<string, string> = {
             <h3 class="update-title">{article.title}</h3>
             <p class="update-desc">{article.description || copy.labels.noDescription}</p>
           </div>
-          <div class="update-arrow">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="update-arrow" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </div>
@@ -110,11 +111,34 @@ const categoryIcons: Record<string, string> = {
   </section>
 </div>
 
+<script>
+  const cards = document.querySelectorAll<HTMLElement>('.bento-card');
+
+  for (const card of cards) {
+    let frameId = 0;
+
+    card.addEventListener('pointermove', (event) => {
+      if (event.pointerType !== 'mouse' || frameId !== 0) {
+        return;
+      }
+
+      const { clientX, clientY } = event;
+
+      frameId = window.requestAnimationFrame(() => {
+        frameId = 0;
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--spot-x', `${((clientX - rect.left) / rect.width) * 100}%`);
+        card.style.setProperty('--spot-y', `${((clientY - rect.top) / rect.height) * 100}%`);
+      });
+    });
+  }
+</script>
+
 <style>
   .mica-home {
     display: flex;
     flex-direction: column;
-    gap: clamp(2.5rem, 4vw, 3.5rem);
+    gap: clamp(2.75rem, 5vw, 4.25rem);
     animation: mica-fade-in 0.6s cubic-bezier(0.33, 0, 0, 1);
   }
 
@@ -123,6 +147,7 @@ const categoryIcons: Record<string, string> = {
       opacity: 0;
       transform: translateY(12px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -135,16 +160,62 @@ const categoryIcons: Record<string, string> = {
 
   .hero {
     position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(13rem, 26vw, 17.5rem);
     overflow: hidden;
     border-radius: var(--site-radius-xl, 16px);
-    padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
-    background: var(--site-bg-panel);
+    padding: clamp(2rem, 4vw, 3.25rem) clamp(1.6rem, 3.5vw, 2.75rem);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--site-bg-panel-strong) 65%, transparent),
+        transparent 60%
+      ),
+      var(--site-bg-panel);
     backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.2);
     -webkit-backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.2);
     border: 1px solid var(--site-line);
     box-shadow:
       var(--site-shadow),
-      inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 5%, transparent);
+      inset 0 1px 0 var(--site-edge-highlight);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--sl-color-gray-3) 13%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--sl-color-gray-3) 13%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 46px 46px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 120% at 82% 50%, #000 10%, transparent 72%);
+    mask-image: radial-gradient(ellipse 70% 120% at 82% 50%, #000 10%, transparent 72%);
+    opacity: 0.55;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -13rem;
+    right: -7rem;
+    width: 30rem;
+    height: 30rem;
+    pointer-events: none;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 20%, transparent);
+    box-shadow:
+      inset 0 0 90px color-mix(in srgb, var(--sl-color-accent) 8%, transparent),
+      0 0 90px color-mix(in srgb, var(--sl-color-accent) 6%, transparent);
   }
 
   .hero-glow {
@@ -153,21 +224,21 @@ const categoryIcons: Record<string, string> = {
     pointer-events: none;
     background:
       radial-gradient(
-        ellipse 60% 100% at 85% 50%,
-        color-mix(in srgb, var(--sl-color-accent) 22%, transparent),
-        transparent 70%
+        ellipse 55% 100% at 88% 45%,
+        color-mix(in srgb, var(--sl-color-accent) 24%, transparent),
+        transparent 68%
       ),
       radial-gradient(
-        ellipse 50% 80% at 10% 20%,
-        color-mix(in srgb, #6b5bd2 12%, transparent),
+        ellipse 45% 80% at 8% 0%,
+        color-mix(in srgb, #6b5bd2 14%, transparent),
         transparent 60%
       ),
       radial-gradient(
-        ellipse 40% 60% at 50% 100%,
-        color-mix(in srgb, var(--sl-color-accent-high) 10%, transparent),
+        ellipse 45% 70% at 52% 110%,
+        color-mix(in srgb, var(--sl-color-accent-high) 9%, transparent),
         transparent 65%
       );
-    opacity: 1;
+    opacity: 0.9;
   }
 
   .hero-body {
@@ -175,21 +246,22 @@ const categoryIcons: Record<string, string> = {
     z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
-    max-width: 42rem;
+    gap: 0.85rem;
+    max-width: 44rem;
   }
 
   .hero-title {
     margin: 0;
-    font-size: clamp(1.75rem, 1.2rem + 2vw, 2.6rem);
+    font-size: clamp(2rem, 1.25rem + 2.4vw, 3rem);
     font-weight: 700;
-    line-height: 1.12;
-    letter-spacing: -0.03em;
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
     color: var(--sl-color-white);
     background: linear-gradient(
-      135deg,
-      var(--sl-color-white),
-      color-mix(in srgb, var(--sl-color-accent) 60%, var(--sl-color-white))
+      120deg,
+      var(--sl-color-white) 30%,
+      color-mix(in srgb, var(--sl-color-accent) 55%, var(--sl-color-white))
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -198,9 +270,11 @@ const categoryIcons: Record<string, string> = {
 
   .hero-desc {
     margin: 0;
-    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.15rem);
-    line-height: 1.65;
+    max-width: 38rem;
+    font-size: clamp(1rem, 0.95rem + 0.22vw, 1.15rem);
+    line-height: 1.7;
     color: var(--sl-color-gray-2);
+    text-wrap: pretty;
   }
 
   /* ============================================================
@@ -210,7 +284,7 @@ const categoryIcons: Record<string, string> = {
   .mica-section {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1.4rem;
   }
 
   .section-header {
@@ -221,10 +295,10 @@ const categoryIcons: Record<string, string> = {
 
   .section-header h2 {
     margin: 0;
-    font-size: clamp(1.35rem, 1.15rem + 0.7vw, 1.75rem);
+    font-size: clamp(1.3rem, 1.1rem + 0.7vw, 1.7rem);
     font-weight: 700;
     color: var(--sl-color-white);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
     white-space: nowrap;
   }
 
@@ -233,7 +307,8 @@ const categoryIcons: Record<string, string> = {
     height: 1px;
     background: linear-gradient(
       90deg,
-      color-mix(in srgb, var(--sl-color-gray-4) 40%, transparent),
+      color-mix(in srgb, var(--sl-color-gray-4) 45%, transparent),
+      color-mix(in srgb, var(--sl-color-gray-4) 12%, transparent) 45%,
       transparent
     );
   }
@@ -244,18 +319,20 @@ const categoryIcons: Record<string, string> = {
 
   .bento-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    gap: clamp(1rem, 1.6vw, 1.35rem);
   }
 
   .bento-card {
     position: relative;
     display: block;
-    border-radius: var(--site-radius-lg, 12px);
+    min-height: 12.5rem;
     padding: 1px;
+    border-radius: var(--site-radius-lg, 12px);
     background: var(--site-line);
-    text-decoration: none !important;
     overflow: hidden;
+    text-decoration: none !important;
     transition:
       transform 0.3s cubic-bezier(0.33, 0, 0, 1),
       box-shadow 0.3s var(--site-ease),
@@ -265,18 +342,33 @@ const categoryIcons: Record<string, string> = {
   .card-glow {
     position: absolute;
     inset: 1px;
+    z-index: 0;
     border-radius: calc(var(--site-radius-lg, 12px) - 1px);
     background:
       radial-gradient(
-        ellipse 80% 50% at 50% 0%,
-        color-mix(in srgb, var(--sl-color-accent) 8%, transparent),
-        transparent 70%
+        ellipse 90% 60% at 50% 0%,
+        color-mix(in srgb, var(--sl-color-accent) 7%, transparent),
+        transparent 72%
       ),
       var(--site-bg-panel);
     backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.15);
     -webkit-backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.15);
-    z-index: 0;
     transition: background 0.3s var(--site-ease);
+  }
+
+  .card-spotlight {
+    position: absolute;
+    inset: 1px;
+    z-index: 0;
+    border-radius: calc(var(--site-radius-lg, 12px) - 1px);
+    background: radial-gradient(
+      16rem circle at var(--spot-x, 50%) var(--spot-y, 0%),
+      color-mix(in srgb, var(--sl-color-accent) 20%, transparent),
+      transparent 68%
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--site-ease);
   }
 
   .card-body {
@@ -284,113 +376,144 @@ const categoryIcons: Record<string, string> = {
     z-index: 1;
     display: flex;
     flex-direction: column;
+    gap: 0.55rem;
     height: 100%;
-    padding: clamp(1.25rem, 2vw, 1.6rem);
-  }
-
-  .bento-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--site-shadow-hover);
-    background: linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--sl-color-accent) 35%, var(--site-line)),
-      color-mix(in srgb, #6b5bd2 15%, var(--site-line))
-    );
-  }
-
-  .bento-card:hover .card-glow {
-    background:
-      radial-gradient(
-        ellipse 80% 50% at 50% 0%,
-        color-mix(in srgb, var(--sl-color-accent) 20%, transparent),
-        transparent 70%
-      ),
-      radial-gradient(
-        ellipse 60% 40% at 80% 100%,
-        color-mix(in srgb, #6b5bd2 8%, transparent),
-        transparent 65%
-      ),
-      var(--site-bg-panel-strong);
+    padding: clamp(1.3rem, 1.9vw, 1.65rem);
   }
 
   .card-top {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 1rem;
     gap: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   .card-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: var(--site-radius, 8px);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 10px;
     background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
     color: var(--sl-color-accent);
-    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 15%, transparent);
     transition:
       background-color 0.3s var(--site-ease),
-      color 0.3s var(--site-ease),
+      border-color 0.3s var(--site-ease),
       transform 0.3s cubic-bezier(0.33, 0, 0, 1);
-  }
-
-  .bento-card:hover .card-icon {
-    background: color-mix(in srgb, var(--sl-color-accent) 18%, transparent);
-    transform: scale(1.05);
   }
 
   .card-badge {
     flex-shrink: 0;
-    font-size: 0.75rem;
+    padding: 0.22rem 0.65rem;
+    font-size: 0.74rem;
     font-weight: 600;
-    padding: 0.25rem 0.7rem;
-    background: color-mix(in srgb, var(--sl-color-accent-low) 35%, transparent);
-    color: var(--sl-color-accent);
-    border-radius: 9999px;
-    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 12%, transparent);
     line-height: 1.5;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--sl-color-accent-low) 32%, transparent);
+    color: var(--sl-color-accent);
+    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 13%, transparent);
+    font-variant-numeric: tabular-nums;
+    transition:
+      background-color 0.3s var(--site-ease),
+      border-color 0.3s var(--site-ease);
   }
 
   .card-title {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.2rem;
+    margin: 0;
+    font-size: 1.22rem;
     font-weight: 700;
-    color: var(--sl-color-white);
     line-height: 1.3;
     letter-spacing: -0.02em;
+    color: var(--sl-color-white);
     transition: color 0.2s var(--site-ease);
   }
 
-  .bento-card:hover .card-title {
-    color: var(--site-link-hover);
-  }
-
   .card-desc {
-    margin: 0 0 1.5rem 0;
-    font-size: 0.925rem;
+    margin: 0;
+    max-width: 36ch;
+    font-size: 0.92rem;
+    line-height: 1.7;
     color: var(--sl-color-gray-2);
-    line-height: 1.6;
     flex-grow: 1;
+    text-wrap: pretty;
   }
 
   .card-footer {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
+    gap: 0.45rem;
+    margin-top: 0.5rem;
+    font-size: 0.86rem;
     font-weight: 600;
     color: var(--site-link);
-    margin-top: auto;
   }
 
   .icon-arrow {
     transition: transform 0.3s cubic-bezier(0.33, 0, 0, 1);
   }
 
-  .bento-card:hover .icon-arrow {
+  @media (hover: hover) {
+    .bento-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--site-shadow-hover);
+      background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--sl-color-accent) 38%, var(--site-line)),
+        color-mix(in srgb, #6b5bd2 18%, var(--site-line))
+      );
+    }
+
+    .bento-card:hover .card-glow {
+      background:
+        radial-gradient(
+          ellipse 90% 60% at 50% 0%,
+          color-mix(in srgb, var(--sl-color-accent) 16%, transparent),
+          transparent 72%
+        ),
+        radial-gradient(
+          ellipse 70% 45% at 85% 100%,
+          color-mix(in srgb, #6b5bd2 8%, transparent),
+          transparent 68%
+        ),
+        var(--site-bg-panel-strong);
+    }
+
+    .bento-card:hover .card-spotlight {
+      opacity: 1;
+    }
+
+    .bento-card:hover .card-icon {
+      background: color-mix(in srgb, var(--sl-color-accent) 18%, transparent);
+      border-color: color-mix(in srgb, var(--sl-color-accent) 28%, transparent);
+      transform: scale(1.04);
+    }
+
+    .bento-card:hover .card-title {
+      color: var(--site-link-hover);
+    }
+
+    .bento-card:hover .icon-arrow {
+      transform: translateX(4px);
+    }
+  }
+
+  .bento-card:focus-visible {
+    box-shadow: var(--site-shadow-strong);
+    background: color-mix(in srgb, var(--sl-color-accent) 48%, var(--site-line));
+  }
+
+  .bento-card:focus-visible .card-glow {
+    background: var(--site-bg-panel-strong);
+  }
+
+  .bento-card:focus-visible .card-title {
+    color: var(--site-link-hover);
+  }
+
+  .bento-card:focus-visible .icon-arrow {
     transform: translateX(4px);
   }
 
@@ -401,21 +524,21 @@ const categoryIcons: Record<string, string> = {
   .updates-list {
     display: flex;
     flex-direction: column;
-    gap: 0.625rem;
+    gap: 0.55rem;
   }
 
   .update-row {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    padding: 1.1rem 1.4rem;
-    background: var(--site-bg-panel);
+    gap: 1.25rem;
+    padding: 0.95rem 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--site-line-strong) 65%, transparent);
+    border-radius: var(--site-radius-lg, 12px);
+    background: var(--site-bg-panel-strong);
     backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.1);
     -webkit-backdrop-filter: blur(var(--site-blur, 30px)) saturate(1.1);
-    border: 1px solid var(--site-line);
-    border-radius: var(--site-radius-lg, 12px);
-    text-decoration: none !important;
     box-shadow: var(--site-shadow);
+    text-decoration: none !important;
     transition:
       border-color 0.25s var(--site-ease),
       background-color 0.25s var(--site-ease),
@@ -423,42 +546,49 @@ const categoryIcons: Record<string, string> = {
       box-shadow 0.25s var(--site-ease);
   }
 
-  .update-row:hover {
-    background: var(--site-bg-panel-strong);
-    border-color: color-mix(in srgb, var(--sl-color-accent) 30%, var(--site-line));
-    transform: translateX(4px);
-    box-shadow: var(--site-shadow-strong);
+  .update-date {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-shrink: 0;
+    width: 7.4rem;
   }
 
-  .update-date {
+  .update-date::before {
+    content: '';
     flex-shrink: 0;
-    width: 6.5rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--sl-color-accent) 55%, var(--sl-color-gray-4));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+    transition:
+      background-color 0.2s var(--site-ease),
+      box-shadow 0.2s var(--site-ease);
   }
 
   .date-text {
     font-family: var(--sl-font-mono), monospace;
-    font-size: 0.825rem;
+    font-size: 0.8rem;
     font-weight: 500;
     color: var(--sl-color-gray-3);
+    font-variant-numeric: tabular-nums;
     transition: color 0.2s var(--site-ease);
   }
 
-  .update-row:hover .date-text {
-    color: var(--sl-color-accent);
-  }
-
   .update-body {
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 0.18rem;
+    flex-grow: 1;
     min-width: 0;
   }
 
   .update-title {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     font-weight: 600;
+    line-height: 1.35;
     color: var(--sl-color-white);
     white-space: nowrap;
     overflow: hidden;
@@ -466,13 +596,10 @@ const categoryIcons: Record<string, string> = {
     transition: color 0.2s var(--site-ease);
   }
 
-  .update-row:hover .update-title {
-    color: var(--site-link-hover);
-  }
-
   .update-desc {
     margin: 0;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
     color: var(--sl-color-gray-3);
     white-space: nowrap;
     overflow: hidden;
@@ -482,17 +609,56 @@ const categoryIcons: Record<string, string> = {
   .update-arrow {
     flex-shrink: 0;
     color: var(--sl-color-gray-4);
-    opacity: 0;
-    transform: translateX(-8px);
+    opacity: 0.45;
     transition:
-      opacity 0.3s cubic-bezier(0.33, 0, 0, 1),
-      transform 0.3s cubic-bezier(0.33, 0, 0, 1),
+      opacity 0.25s var(--site-ease),
+      transform 0.25s cubic-bezier(0.33, 0, 0, 1),
       color 0.2s var(--site-ease);
   }
 
-  .update-row:hover .update-arrow {
+  @media (hover: hover) {
+    .update-row:hover {
+      border-color: color-mix(in srgb, var(--sl-color-accent) 32%, var(--site-line));
+      background: var(--site-bg-panel-solid);
+      transform: translateX(3px);
+      box-shadow: var(--site-shadow-strong);
+    }
+
+    .update-row:hover .date-text {
+      color: var(--sl-color-accent);
+    }
+
+    .update-row:hover .update-date::before {
+      background: var(--sl-color-accent);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
+    }
+
+    .update-row:hover .update-title {
+      color: var(--site-link-hover);
+    }
+
+    .update-row:hover .update-arrow {
+      opacity: 1;
+      transform: translateX(2px);
+      color: var(--sl-color-accent);
+    }
+  }
+
+  .update-row:focus-visible {
+    border-color: color-mix(in srgb, var(--sl-color-accent) 45%, var(--site-line));
+    background: var(--site-bg-panel-solid);
+  }
+
+  .update-row:focus-visible .date-text {
+    color: var(--sl-color-accent);
+  }
+
+  .update-row:focus-visible .update-title {
+    color: var(--site-link-hover);
+  }
+
+  .update-row:focus-visible .update-arrow {
     opacity: 1;
-    transform: translateX(0);
     color: var(--sl-color-accent);
   }
 
@@ -501,15 +667,53 @@ const categoryIcons: Record<string, string> = {
      ============================================================ */
 
   @media (max-width: 768px) {
+    .hero {
+      min-height: 0;
+      padding: 2rem 1.4rem;
+    }
+
+    .hero::after {
+      top: -16rem;
+      right: -10rem;
+      opacity: 0.7;
+    }
+
+    .bento-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .bento-card {
+      min-height: 0;
+    }
+
+    .card-body {
+      gap: 0.4rem;
+      padding: 1.1rem 1.15rem;
+    }
+
+    .card-top {
+      margin-bottom: 0.3rem;
+    }
+
+    .card-icon {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+
+    .card-footer {
+      margin-top: 0.3rem;
+    }
+
     .update-row {
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.5rem;
-      padding: 1rem 1.2rem;
+      gap: 0.3rem;
+      padding: 0.9rem 1.1rem;
     }
 
     .update-date {
       width: auto;
+      gap: 0.5rem;
     }
 
     .update-body {
@@ -524,9 +728,17 @@ const categoryIcons: Record<string, string> = {
     .update-arrow {
       display: none;
     }
+  }
 
-    .bento-grid {
-      grid-template-columns: 1fr;
+  @media (hover: none) {
+    .card-glow,
+    .update-row {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .card-glow {
+      background: var(--site-bg-panel-strong);
     }
   }
 
@@ -543,7 +755,8 @@ const categoryIcons: Record<string, string> = {
       transition: none;
     }
 
-    .bento-card:hover {
+    .bento-card:hover,
+    .bento-card:focus-visible {
       transform: none;
     }
 

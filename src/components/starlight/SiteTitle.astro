@@ -36,6 +36,30 @@ const siteTitleHref = toRelativePath(Astro.url.pathname, targetPathname);
   </span>
 </a>
 
+<script>
+  const header = document.querySelector('header.header');
+
+  if (header) {
+    let frameId = 0;
+
+    const syncScrolledState = () => {
+      frameId = 0;
+      header.toggleAttribute('data-scrolled', window.scrollY > 4);
+    };
+
+    const requestSync = () => {
+      if (frameId !== 0) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(syncScrolledState);
+    };
+
+    window.addEventListener('scroll', requestSync, { passive: true });
+    syncScrolledState();
+  }
+</script>
+
 <style>
   @layer starlight.core {
     .site-title {

@@ -35,14 +35,14 @@
 :root[data-has-sidebar] main > .content-panel:first-of-type:has(.dr-page-title--article) .sl-container {
   box-shadow:
     var(--site-shadow-strong),
-    inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 5%, transparent);
+    inset 0 1px 0 var(--site-edge-highlight);
 }
 
 :root[data-has-sidebar] main > .content-panel:nth-of-type(2):has(.dr-doc-content) .sl-container,
 :root[data-has-sidebar] .right-sidebar-panel:has(.dr-toc--article) .sl-container {
   box-shadow:
     var(--site-shadow),
-    inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 3%, transparent);
+    inset 0 1px 0 var(--site-edge-highlight);
 }
 
 /* ============================================================

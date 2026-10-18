@@ -10,6 +10,7 @@ const copy = SITE_COPY[locale];
 <StarlightPage
   frontmatter={{
     title: copy.title,
+    head: [{ tag: 'title', content: copy.title }],
     description: copy.description,
     template: 'splash',
     editUrl: false,
